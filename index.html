@@ -1,34 +1,82 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hacker News Reader</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e9">
+  <meta name="description" content="A thoughtful, live reading room for the stories and conversations on Hacker News.">
+  <title>Hacker News Reader</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <header>
-      <b>HN Reader</b>
-      <nav><a href="#" data-feed="new" class="on">new</a><a href="#" data-feed="jobs">jobs</a></nav>
-      <span id="live">connecting…</span>
-    </header>
-    <div id="banner" hidden></div>
-  </div>
-  <main id="feed"></main>
-  <div id="status"></div>
-  <div id="sentinel"></div>
-</div>
-<div id="toast" role="status" aria-live="polite"></div>
+  <div class="wrap">
+    <div class="top">
+      <div class="utility-bar">
+        <span>THE COMMUNITY FRONT PAGE</span>
+        <span>Independent voices. Shared curiosity.</span>
+      </div>
+      <header>
+        <a class="brand" href="#" aria-label="Hacker News Reader home">
+          <span class="brand-mark" aria-hidden="true">HN</span>
+          <span class="brand-name">Hacker News<small>Reader's edition</small></span>
+        </a>
+        <span class="header-rule" aria-hidden="true"></span>
+        <nav aria-label="Choose a feed">
+          <a href="#" data-feed="new" class="on">Stories</a>
+          <a href="#" data-feed="jobs">Jobs</a>
+        </nav>
+        <div class="live-status">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span id="live" role="status" aria-live="polite">connecting…</span>
+        </div>
+      </header>
+      <div id="banner" hidden></div>
+    </div>
 
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/render.js"></script>
-<script src="js/feed.js"></script>
-<script src="js/live.js"></script>
-<script src="js/main.js"></script>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="eyebrow"><span aria-hidden="true"></span> Today on Hacker News</div>
+        <div class="intro-row">
+          <div>
+            <h1 id="page-title">Ideas in motion.</h1>
+            <p>Stories and conversations from the people building what comes next.</p>
+          </div>
+          <div class="edition-note">
+            <span>THE FRONT PAGE</span>
+            <span>Updated as it happens</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="feed-section" aria-labelledby="feed-heading">
+        <div class="feed-heading">
+          <div>
+            <span class="section-kicker">A community in conversation</span>
+            <h2 id="feed-heading">The latest</h2>
+          </div>
+          <p>Fresh links, ideas, and discussion</p>
+        </div>
+        <div id="feed" class="story-grid" aria-label="Hacker News stories"></div>
+        <div id="status" role="status" aria-live="polite"></div>
+        <div id="sentinel" aria-hidden="true"></div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Hacker News Reader</span>
+      <span>Stories and discussion via Hacker News</span>
+    </footer>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/render.js"></script>
+  <script src="feed.js"></script>
+  <script src="live.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
 
