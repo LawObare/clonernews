@@ -1,5 +1,3 @@
-// render.js
-// Owner: Person B
 // Turns items into DOM: posts, polls, comments, nested replies, collapse.
 
 function fillMeta(art, it) {
