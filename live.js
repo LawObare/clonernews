@@ -1,5 +1,3 @@
-// live.js
-// Owner: Person C
 // Live data polling, new-items banner, merge without losing scroll place.
 
 let pending = [], delay = POLL_MS, lastPoll = 0, timer;
