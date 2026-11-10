@@ -1,4 +1,4 @@
-.push:
+push:
 	git push
 	git push upstream
 
