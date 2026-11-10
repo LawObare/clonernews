@@ -1,0 +1,40 @@
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:#000;font:13px/1.4 Verdana,Geneva,sans-serif}
+.wrap{max-width:85%;margin:8px auto;background:#f6f6ef;min-height:90vh}
+.top{position:sticky;top:0;z-index:5}
+header{background:#ff6600;display:flex;align-items:center;gap:10px;padding:3px 8px}
+header b{margin-right:6px}
+nav a{color:#000;text-decoration:none;margin-right:8px}
+nav a.on{color:#fff}
+#live{margin-left:auto;font-size:11px}
+#banner{background:#ffe9d6;border-bottom:1px solid #e0c3a8;padding:4px 10px;font-size:12px}
+#banner ul{margin:3px 0 0;padding-left:18px;color:#555}
+button{font:inherit;background:none;border:0;padding:0;color:#828282;cursor:pointer}
+button:hover{text-decoration:underline}
+#banner button{color:#000;text-decoration:underline;margin-left:6px}
+.post{padding:7px 10px 3px}
+.title a{color:#000;text-decoration:none}
+.title a:visited{color:#828282}
+.badge{font-size:11px;color:#828282;border:1px solid #c8c8c0;padding:0 3px;margin-right:5px}
+.host,.meta{font-size:11px;color:#828282}
+.host{margin-left:5px}
+.meta{margin-top:1px}
+.text{margin:5px 0;overflow-wrap:anywhere}
+.text p{margin:0 0 8px}
+.text pre{overflow-x:auto;background:#eaeadf;padding:4px}
+.text a{color:#000;text-decoration:underline}
+.poll{margin:5px 0 2px;max-width:420px}
+.opt{position:relative;padding:2px 6px;margin-bottom:2px;border:1px solid #ddd;background:#fff}
+.opt i{position:absolute;inset:0 auto 0 0;background:#ffd9bf}
+.opt span{position:relative}
+.comments{margin:4px 0 6px}
+.comment{margin-top:8px}
+.replies{margin-left:22px}
+.folded>.text,.folded>.replies,.folded>.rbtn{display:none}
+.rbtn{margin-top:2px;font-size:11px}
+.empty{color:#828282;font-size:11px;margin:4px 0}
+#status{padding:12px;color:#828282;text-align:center;font-size:12px}
+#toast{position:fixed;left:12px;bottom:12px;background:#333;color:#fff;padding:6px 10px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+:focus-visible{outline:2px solid #00f;outline-offset:1px}
+@media(max-width:700px){.wrap{max-width:100%;margin:0}}
