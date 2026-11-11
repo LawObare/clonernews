@@ -22,16 +22,50 @@ function renderPost(it) {
     try { title.append(el('span', 'host', `(${new URL(it.url).hostname.replace(/^www\./, '')})`)); } catch { /* bad url */ }
   }
 
+  const content = el('div', 'post-content');
+  content.hidden = true;
+  const contentToggle = el('button', 'post-toggle', 'Expand');
+  contentToggle.type = 'button';
+  contentToggle.setAttribute('aria-expanded', 'false');
+  contentToggle.setAttribute('aria-label', `Expand ${it.title || 'story details'}`);
+  contentToggle.onclick = () => {
+    const expanded = contentToggle.getAttribute('aria-expanded') !== 'true';
+    content.hidden = !expanded;
+    contentToggle.textContent = expanded ? 'Collapse' : 'Expand';
+    contentToggle.setAttribute('aria-expanded', String(expanded));
+    contentToggle.setAttribute('aria-label', `${expanded ? 'Collapse' : 'Expand'} ${it.title || 'story details'}`);
+  };
+  title.append(contentToggle);
+
   const meta = el('div', 'meta');
   const toggle = el('button', 'ctoggle');
   meta.append(el('span', 'stats'), ' | ', toggle);
-  art.append(title, meta);
+  content.append(meta);
+  art.append(title, content);
 
-  if (it.text) { const d = el('div', 'text'); d.append(clean(it.text)); art.append(d); }
+  if (it.text) {
+    const storyText = el('section', 'story-copy');
+    storyText.append(el('h3', '', it.type === 'job' ? 'Job description' : 'Story text'));
+    const body = el('div', 'text');
+    body.append(clean(it.text));
+    storyText.append(body);
+    content.append(storyText);
+  }
+
+  if (it.url) {
+    const source = el('div', 'story-source');
+    source.append(el('span', '', 'Full article'));
+    const readLink = el('a', '', 'Read the full story ↗');
+    readLink.href = it.url;
+    readLink.target = '_blank';
+    readLink.rel = 'noopener noreferrer';
+    source.append(readLink);
+    content.append(source);
+  }
 
   if (it.type === 'poll' && it.parts) {
     const poll = el('div', 'poll');
-    art.append(poll);
+    content.append(poll);
     getItems(it.parts).then(({ items }) => {
       const total = items.reduce((s, o) => s + (o.score || 0), 0) || 1;
       for (const o of items) {
@@ -45,7 +79,7 @@ function renderPost(it) {
 
   const box = el('div', 'comments');
   box.hidden = true;
-  art.append(box);
+  content.append(box);
   toggle.onclick = () => {
     box.hidden = !box.hidden;
     if (box.dataset.init) return;
