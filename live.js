@@ -1,6 +1,6 @@
 // Live data polling, new-items banner, merge without losing scroll place.
 
-let pending = [], delay = POLL_MS, lastPoll = 0, timer;
+let pending = [], delay = POLL_MS, lastPoll = Date.now(), timer, polling = false;
 
 function setLive(ok) {
   $('#live').textContent = ok ? `live, updated ${new Date().toLocaleTimeString()}` : 'offline, retrying…';
@@ -13,7 +13,7 @@ async function showBanner() {
   if (!pending.length) return hideBanner();
   document.title = `(${pending.length}) Hacker News Reader`;
   const { items } = await getItems(pending.slice(0, 3));
-  const noun = feed === 'jobs' ? 'job' : 'item';
+  const noun = feed === 'jobs' ? 'job' : feed === 'polls' ? 'poll' : 'item';
   b.replaceChildren(`${pending.length} new ${noun}${pending.length === 1 ? '' : 's'}`);
   const btn = el('button', '', 'show');
   btn.onclick = mergePending;
@@ -42,6 +42,8 @@ async function mergePending() {
 }
 
 async function poll() {
+  if (polling || document.hidden) return;
+  polling = true;
   const my = gen;
   lastPoll = Date.now();
   try {
@@ -62,33 +64,48 @@ async function poll() {
         if (art) fillMeta(art, it);
       }
     }));
+    if (my !== gen) return;
 
     // new submissions newer than the head of the list
     if (ids.length) {
       const head = ids[0];
-      const fresh = latest.filter(id => id > head).sort((a, b) => b - a);
+      let fresh = latest.filter(id => id > head).sort((a, b) => b - a);
+      if (feed === 'polls' && fresh.length) {
+        const { items } = await getItems(fresh);
+        fresh = items.filter(it => it.type === 'poll').map(it => it.id);
+      }
+      if (my !== gen) return;
       const added = fresh.length - pending.length;
       pending = fresh;
       await showBanner();
-      if (added > 0) toast(`${added} new ${feed === 'jobs' ? 'job' : 'item'}${added === 1 ? '' : 's'}`);
+      if (added > 0) {
+        const noun = feed === 'jobs' ? 'job' : feed === 'polls' ? 'poll' : 'item';
+        toast(`${added} new ${noun}${added === 1 ? '' : 's'}`);
+      }
     }
     if (updated) toast(`${updated} post${updated === 1 ? '' : 's'} updated`);
   } catch {
     delay = Math.min(delay * 2, 60000);
     setLive(false);
+  } finally {
+    polling = false;
+    schedule();
   }
 }
 
 function schedule() {
   clearTimeout(timer);
-  timer = setTimeout(async () => {
-    if (document.hidden) return;   // paused; visibilitychange restarts it
-    await poll();
-    schedule();
-  }, delay);
+  timer = null;
+  if (document.hidden || polling) return;
+  const wait = Math.max(0, delay - (Date.now() - lastPoll));
+  timer = setTimeout(() => {
+    timer = null;
+    if (!document.hidden) poll();
+  }, wait);
 }
 
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) return clearTimeout(timer);
-  if (Date.now() - lastPoll >= POLL_MS) poll().finally(schedule); else schedule();
-});
+const handleVisibilityChange = debounce(() => {
+  if (document.hidden) { clearTimeout(timer); timer = null; return; }
+  if (Date.now() - lastPoll >= delay) poll(); else schedule();
+}, 150);
+document.addEventListener('visibilitychange', handleVisibilityChange);

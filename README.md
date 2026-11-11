@@ -14,11 +14,11 @@ python3 -m http.server 8000
 
 Open [http://localhost:8000](http://localhost:8000) in your browser. Stop the server with `Ctrl+C`.
 
-Use the **Stories** and **Jobs** links in the header to switch feeds. Story comments can be expanded from each card.
+Use the **Stories**, **Jobs**, and **Polls** links in the header to switch feeds. The Polls view searches the recent story list in small batches because the API has no dedicated poll-list endpoint. Story comments can be expanded from each card.
 
 ## Features
 
-- New stories and job listings from Hacker News
+- New stories, job listings, and polls from Hacker News
 - Progressive loading as you scroll
 - Live checks for new stories and changes to scores and comment counts
 - Expandable story discussions and nested replies
